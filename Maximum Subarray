@@ -1,0 +1,78 @@
+#include<stdio.h>
+int max_subarray_sum(int a[],int low,int high);
+int max(int a,int b,int c);
+int max_crosing_subarray(int a[],int low,int mid,int high);
+int main()
+{
+    int a[100000],n,i;
+    int testcases;
+    printf("Enter no of testcases ");
+    scanf("%d",&testcases);
+    while(testcases--)
+    {
+        printf("Enter size of array ");
+        scanf("%d",&n);// number of elements in array
+        for(i=0;i<n;i++)
+        {
+            printf("enter element %d -> ",i+1);
+            scanf("%d",&a[i]);// scanning array elements
+        }
+
+        int max_sum=max_subarray_sum(a,0,n-1);
+        printf("%d\n",max_sum);
+    }
+    return 0;
+}
+
+int max_subarray_sum(int a[],int low,int high)
+{
+    if(low==high)
+    {
+        return a[low];
+    }
+    else
+    {
+        int mid=(low+high)/2;
+        return (max(max_subarray_sum(a,low,mid),max_subarray_sum(a,mid+1,high),max_crossing_subarray(a,low,mid,high)));
+    }
+}
+int max(int a,int b,int c)
+{
+    if(a>b && a>c)
+    {
+        return a;
+    }
+    else if(b>a && b>c)
+    {
+        return b;
+    }
+    else
+    {
+        return c;
+    }
+}
+int max_crossing_subarray(int a[],int low,int mid,int high)
+{
+    int left_sum=-1,right_sum=-1;
+    int sum=0,i,j;
+    for(i=mid;i>=0;i--)
+    {
+        sum=sum+a[i];
+        if(sum>left_sum)
+        {
+            left_sum=sum;
+
+        }
+    }
+    sum=0;
+    for(j=mid+1;j<=high;j++)
+    {
+        sum=sum+a[j];
+        if(sum>right_sum)
+        {
+            right_sum=sum;
+        }
+
+    }
+    return left_sum+right_sum;
+}
